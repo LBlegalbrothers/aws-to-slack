@@ -58,6 +58,15 @@ exports.parse = event => {
 		color = event.COLORS.warning;
 	}
 
+	if ('New application version was deployed' in text){
+		// 새 인스턴스 배포는 알림 제외
+		return false;
+	}
+	if (color!=event.COLORS.critical){
+		// critial 알림만 푸시
+		return false
+	}
+
 	return event.attachmentWithDefaults({
 		fallback: `${application} / ${environment}: ${text}`,
 		color: color,

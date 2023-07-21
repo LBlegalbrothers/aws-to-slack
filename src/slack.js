@@ -4,9 +4,8 @@ const url = require("url")
 	, _ = require("lodash");
 
 /** The Slack hook URL */
-const hookUrlPromise = shouldDecryptBlob(process.env.SLACK_HOOK_URL, s =>
-	// URL should be 78-80 characters long when decrypted
-	s.length > 100 && !/https?:\/\/\w/.test(s));
+const hookUrlPromise = "https://hooks.slack.com/services/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";
+
 
 /** The Slack channel to send a message to stored in the slackChannel environment variable */
 const slackChannelPromise = shouldDecryptBlob(process.env.SLACK_CHANNEL);
