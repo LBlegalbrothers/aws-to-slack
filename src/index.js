@@ -140,9 +140,11 @@ class LambdaHandler {
 					const res = await handler.processEvent(new EventDef(singleRecordEvent));
 					if (res) {
 						const message = res.slackMessage;
-						console.log(`SNS-Record[${i}]: Sending Slack message from Parser[${res.parserName}]:`, JSON.stringify(message, null, 2));
-						waitingTasks.push(Slack.postMessage(message));
-						waitingTasks.push(Emailer.checkAndSend(message, event));
+						if (message.attachments[0].color=='danger'){
+							console.log(`SNS-Record[${i}]: Sending Slack message from Parser[${res.parserName}]:`, JSON.stringify(message, null, 2));
+							waitingTasks.push(Slack.postMessage(message));
+							waitingTasks.push(Emailer.checkAndSend(message, event));
+						}
 					}
 					else if (handler.lastParser) {
 						console.error(`SNS-Record[${i}]: Parser[${handler.lastParser}] is force-ignoring record`);
@@ -156,9 +158,12 @@ class LambdaHandler {
 				const res = await handler.processEvent(new EventDef(event));
 				if (res) {
 					const message = res.slackMessage;
-					console.log(`Sending Slack message from Parser[${res.parserName}]:`, JSON.stringify(message, null, 2));
-					waitingTasks.push(Slack.postMessage(message));
-					waitingTasks.push(Emailer.checkAndSend(message, event));
+					if (message.attachments[0].color=='danger'){
+						console.log(`Sending Slack message from Parser[${res.parserName}]:`, JSON.stringify(message, null, 2));
+						waitingTasks.push(Slack.postMessage(message));
+						waitingTasks.push(Emailer.checkAndSend(message, event));	
+					}
+				
 				}
 				else if (handler.lastParser) {
 					console.error(`Parser[${handler.lastParser}] is force-ignoring event`);
